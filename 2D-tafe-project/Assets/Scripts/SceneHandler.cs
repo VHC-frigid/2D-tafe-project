@@ -15,6 +15,7 @@ public class SceneHandler : MonoBehaviour
 
     public void ChangeScene(string targetScene)
     {
+        Debug.Log("Attempting to load scene: " + targetScene);
         SceneManager.LoadSceneAsync(targetScene);
     }
 }

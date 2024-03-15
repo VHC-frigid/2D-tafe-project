@@ -18,7 +18,7 @@ public class LevelEnd : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag != "Player") return;
+        if (other.gameObject.tag != "Player") Debug.LogWarning("Whatever collided wasn't player"); return;
 
         if (targetScene == "" || targetScene == null) Debug.LogWarning("No target scene set!"); return;
 
