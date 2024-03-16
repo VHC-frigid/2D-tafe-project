@@ -3,12 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ground
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Ground
@@ -46,4 +47,7 @@ TagManager:
     locked: 0
   - name: terrain
     uniqueID: 2231555651
+    locked: 0
+  - name: Player
+    uniqueID: 289917013
     locked: 0
