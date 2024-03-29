@@ -29,7 +29,26 @@ public class Bomb : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.collider.CompareTag("Player"))
+        {
+            explosionComponent.enabled = true;
 
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+
+            for(int i = 0; i< colliders.Length; i++)
+            {
+                Rigidbody2D rigid = colliders[i].GetComponent<Rigidbody2D>();
+                rigid.AddTorque(addTorqueAmountInDegrees * Mathf.Deg2Rad * rigid.inertia);
+            }
+
+            Invoke("DestroyBombObject", 0.1f);       
+        
+        } 
+    }
+
+    void DestroyBombObject()
+    {
+        Destroy(this.gameObject);
     }
 
 }
