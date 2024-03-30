@@ -24,7 +24,7 @@ public class Bomb : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -46,6 +46,7 @@ public class Bomb : MonoBehaviour
         } 
     }
 
+    
     void DestroyBombObject()
     {
         Destroy(this.gameObject);
