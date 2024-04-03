@@ -8,6 +8,7 @@ public class BombSpawner : MonoBehaviour
 
     [SerializeField] public GameObject bombPrefab; // Bomb prefab used to spawn new bombs
     Vector3 playerPos; // For storing the player position
+    Vector3 bombSpawnPosition; // For storing the bomb spawn position
 
     // Start is called before the first frame update
     void Start()
@@ -33,8 +34,10 @@ public class BombSpawner : MonoBehaviour
 
         // Stores the player position
         playerPos = transform.position;
+        // Stores the BombSpawnPos
+        bombSpawnPosition = transform.GetChild(2).position;
         // Spawns the bomb at player position
-        Instantiate(bombPrefab, playerPos, Quaternion.identity);
+        Instantiate(bombPrefab, playerPos + bombSpawnPosition, Quaternion.identity);
     }
 
 }
