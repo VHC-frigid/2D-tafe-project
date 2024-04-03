@@ -242,3 +242,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   circleCollider: {fileID: 0}
   addTorqueAmountInDegrees: 0
+  blastForce: 15

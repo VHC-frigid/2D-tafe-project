@@ -7,7 +7,8 @@ public class Bomb : MonoBehaviour
     PointEffector2D explosionComponent;
     [SerializeField] CircleCollider2D circleCollider;
 
-    [SerializeField] private float addTorqueAmountInDegrees;
+    [SerializeField] private float addTorqueAmountInDegrees; //may be unused now
+    [SerializeField] private float blastForce = 100f;
 
     private float explosionRadius;
     // Start is called before the first frame update
@@ -35,13 +36,24 @@ public class Bomb : MonoBehaviour
 
             Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
 
-            for(int i = 0; i< colliders.Length; i++)
+            for (int i = 0; i< colliders.Length; i++)
             {
-                Rigidbody2D rigid = colliders[i].GetComponent<Rigidbody2D>();
-                rigid.AddTorque(addTorqueAmountInDegrees * Mathf.Deg2Rad * rigid.inertia);
-            }
+                // Calculate direction from bomb to player/collider
+                Vector2 direction = collision.collider.transform.position - transform.position;
+                direction.Normalize();
+                // Log direction vector for debugging
+                Debug.Log("Direction Vector: " + direction);
+                Debug.DrawRay(transform.position, direction * 5f, Color.red, 1f); // Adjust length and color as needed
 
-            Invoke("DestroyBombObject", 0.1f);       
+                Rigidbody2D rigid = colliders[i].GetComponent<Rigidbody2D>();
+                //rigid.AddTorque(addTorqueAmountInDegrees * Mathf.Deg2Rad * rigid.inertia);
+
+                
+                rigid.AddForce(direction * blastForce, ForceMode2D.Impulse);
+                Debug.Log("Force Applied: " + (direction * blastForce));
+            }
+            DestroyBombObject();
+            //Invoke("DestroyBombObject", 0.1f);       
         
         } 
     }
