@@ -10628,6 +10628,7 @@ MonoBehaviour:
     m_Bits: 64
   moveSpeed: 7
   jumpForce: 7
+  stunIntensity: 2
 --- !u!95 &1864683077
 Animator:
   serializedVersion: 5

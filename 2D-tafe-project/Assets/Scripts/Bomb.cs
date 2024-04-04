@@ -38,6 +38,13 @@ public class Bomb : MonoBehaviour
 
             for (int i = 0; i< colliders.Length; i++)
             {
+                //Apply stun to player
+                PlayerMovement rigid2 = colliders[i].GetComponent<PlayerMovement>();
+                if (rigid2 != null)
+                {
+                    rigid2.StunLock();
+                    Debug.Log("STUNNED");
+                }
                 // Calculate direction from bomb to player/collider
                 Vector2 direction = collision.collider.transform.position - transform.position;
                 direction.Normalize();
@@ -46,11 +53,12 @@ public class Bomb : MonoBehaviour
                 Debug.DrawRay(transform.position, direction * 5f, Color.red, 1f); // Adjust length and color as needed
 
                 Rigidbody2D rigid = colliders[i].GetComponent<Rigidbody2D>();
-                //rigid.AddTorque(addTorqueAmountInDegrees * Mathf.Deg2Rad * rigid.inertia);
+                //rigid.AddTorque(addTorqueAmountInDegrees * Mathf.Deg2Rad * rigid.inertia); breaks directional force
 
                 
-                rigid.AddForce(direction * blastForce, ForceMode2D.Impulse);
+                rigid.AddForce(direction * blastForce + Vector2.down, ForceMode2D.Impulse); // Vector2.down is to make the horizontal force more apparent
                 Debug.Log("Force Applied: " + (direction * blastForce));
+
             }
             DestroyBombObject();
             //Invoke("DestroyBombObject", 0.1f);       
