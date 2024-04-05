@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private LayerMask jumpableGround;
 
+    [SerializeField] private ParticleSystem particleSystem1, particleSystem2;
+
     private float dirX = 0f;
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpForce = 7f;
@@ -90,7 +92,8 @@ public class PlayerMovement : MonoBehaviour
         if (stunAmount < 0 ) stunAmount = 0;
         Debug.Log("stunAmount: " + stunAmount);
         Debug.Log("stunEFFECT: " + Mathf.Clamp((stunIntensity - stunAmount - 0.5f) / (stunIntensity - 0.5f), 0f, stunIntensity));
-   }
+        ParticlesOn();
+    }
    
    private void UpdateAnimationState()
    {
@@ -136,6 +139,28 @@ public class PlayerMovement : MonoBehaviour
     public void StunLock()
     {
         stunAmount = stunIntensity + 0.5f;
+    }
+
+    private void ParticlesOn()
+    {
+        var mainModule1 = particleSystem1.main;
+        var mainModule2 = particleSystem2.main;
+        Color startColor1 = mainModule1.startColor.color;
+        Color startColor2 = mainModule2.startColor.color;
+
+        if (IsGrounded())
+        {
+
+            startColor1.a = 1;
+            startColor2.a = 1;
+
+        } else
+        {
+            startColor1.a = 0;
+            startColor2.a = 0;
+        }
+        mainModule1.startColor = startColor1;
+        mainModule2.startColor = startColor2;
     }
 
 

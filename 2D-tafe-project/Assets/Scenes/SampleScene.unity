@@ -10626,6 +10626,8 @@ MonoBehaviour:
   jumpableGround:
     serializedVersion: 2
     m_Bits: 64
+  particleSystem1: {fileID: 2079148018}
+  particleSystem2: {fileID: 1081811173}
   moveSpeed: 7
   jumpForce: 7
   stunIntensity: 2
