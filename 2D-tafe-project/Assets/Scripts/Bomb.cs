@@ -43,7 +43,7 @@ public class Bomb : MonoBehaviour
                 if (rigid2 != null)
                 {
                     rigid2.StunLock();
-                    Debug.Log("STUNNED");
+                    //Debug.Log("STUNNED");
                 }
                 // Calculate direction from bomb to player/collider
                 Vector2 direction = collision.collider.transform.position - transform.position;

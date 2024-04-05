@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2396041323238285862}
   - component: {fileID: 2837523256337681299}
   - component: {fileID: 369140033958573872}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: smallbomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}

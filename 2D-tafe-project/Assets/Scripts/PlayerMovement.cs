@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     private bool playerOrientationLeft = true;
 
     private float stunAmount = 0f;
+    private float stunHard = 0.5f;
     [SerializeField] private float stunIntensity = 2f; // Number of seconds it takes for player stun to completely ware off
 
     // Start is called before the first frame update
@@ -36,45 +37,48 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        float origVelocity = rb.velocity.x;
+
         dirX = Input.GetAxis("Horizontal");
         // Conditions for movement
         // If in normal bounds or 
-        if (Mathf.Abs(rb.velocity.x) <= moveSpeed || Mathf.Abs(rb.velocity.x) > Mathf.Abs(rb.velocity.x + dirX) && stunIntensity - stunAmount > 0f)
+        if (Mathf.Abs(rb.velocity.x) <= moveSpeed || Mathf.Abs(rb.velocity.x) > Mathf.Abs(rb.velocity.x + dirX))
         {
-            rb.velocity = new Vector2(rb.velocity.x + Mathf.Clamp((dirX * moveSpeed * (Mathf.Clamp((stunIntensity-stunAmount - 0.5f)/(stunIntensity - 0.5f), 0f, stunIntensity))) - rb.velocity.x, -moveSpeed, moveSpeed), rb.velocity.y);
+            rb.velocity = new Vector2(rb.velocity.x + Mathf.Clamp((dirX * moveSpeed * (Mathf.Clamp((stunIntensity-stunAmount - stunHard)/(stunIntensity - stunHard), 0f, stunIntensity))) - rb.velocity.x, -moveSpeed, moveSpeed), rb.velocity.y);
         }
+        if (stunAmount > stunHard) rb.velocity = new Vector2(origVelocity, rb.velocity.y);
 
-        /*if (Input.GetAxis("Horizontal") != 0)
-        {
-            // NOTE: Update so that pressing in direction moving doesnt cap speed
-            // if player is moving within normal movement speeds then allow move as normal
-            if(Mathf.Abs(rb.velocity.x) <= moveSpeed) //do I add * dirX?
+            /*if (Input.GetAxis("Horizontal") != 0)
             {
-                rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y); //normal movement allowed
-            } else // else if the player is moving faster than normal bounds... special conditions
-            {
-                // if input is in same direction as player velocity
-                if (Mathf.Abs(rb.velocity.x) < Mathf.Abs(rb.velocity.x + dirX))
+                // NOTE: Update so that pressing in direction moving doesnt cap speed
+                // if player is moving within normal movement speeds then allow move as normal
+                if(Mathf.Abs(rb.velocity.x) <= moveSpeed) //do I add * dirX?
                 {
-                    // !!! removed temporarily to test if we should be able to speed up in air or not !!!
-                    //rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
-                } else
-                // If input is in opposite direction as player velocity
-                //if (Mathf.Abs(rb.velocity.x) > Mathf.Abs(dirX * moveSpeed))
+                    rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y); //normal movement allowed
+                } else // else if the player is moving faster than normal bounds... special conditions
                 {
-                    // If input direction is in the opposite direction as player velocity
-                    // (so if player is pressing the opposite direction theyre moving in)
-                    if (Mathf.Abs(rb.velocity.x) > Mathf.Abs(rb.velocity.x + dirX))
+                    // if input is in same direction as player velocity
+                    if (Mathf.Abs(rb.velocity.x) < Mathf.Abs(rb.velocity.x + dirX))
                     {
-                        rb.velocity = new Vector2(rb.velocity.x + (dirX * moveSpeed * Time.deltaTime / 10), rb.velocity.y);
+                        // !!! removed temporarily to test if we should be able to speed up in air or not !!!
+                        //rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
+                    } else
+                    // If input is in opposite direction as player velocity
+                    //if (Mathf.Abs(rb.velocity.x) > Mathf.Abs(dirX * moveSpeed))
+                    {
+                        // If input direction is in the opposite direction as player velocity
+                        // (so if player is pressing the opposite direction theyre moving in)
+                        if (Mathf.Abs(rb.velocity.x) > Mathf.Abs(rb.velocity.x + dirX))
+                        {
+                            rb.velocity = new Vector2(rb.velocity.x + (dirX * moveSpeed * Time.deltaTime / 10), rb.velocity.y);
+                        }
+
                     }
-
                 }
-            }
-            
-        }*/
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+            }*/
+
+            if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
@@ -90,8 +94,8 @@ public class PlayerMovement : MonoBehaviour
             stunAmount -= Time.deltaTime;
         }
         if (stunAmount < 0 ) stunAmount = 0;
-        Debug.Log("stunAmount: " + stunAmount);
-        Debug.Log("stunEFFECT: " + Mathf.Clamp((stunIntensity - stunAmount - 0.5f) / (stunIntensity - 0.5f), 0f, stunIntensity));
+        //Debug.Log("stunAmount: " + stunAmount);
+        //Debug.Log("stunEFFECT: " + Mathf.Clamp((stunIntensity - stunAmount - 0.5f) / (stunIntensity - 0.5f), 0f, stunIntensity));
         ParticlesOn();
     }
    
@@ -137,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void StunLock()
     {
-        stunAmount = stunIntensity + 0.5f;
+        stunAmount = stunIntensity;
     }
 
     private void ParticlesOn()

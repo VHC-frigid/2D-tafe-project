@@ -15585,6 +15585,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: smallbomb
       objectReference: {fileID: 0}
+    - target: {fileID: 2715182111556677091, guid: 7f891db6801651d498fe8fa0ac5c3455, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
