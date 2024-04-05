@@ -49,15 +49,15 @@ public class Bomb : MonoBehaviour
                 Vector2 direction = collision.collider.transform.position - transform.position;
                 direction.Normalize();
                 // Log direction vector for debugging
-                Debug.Log("Direction Vector: " + direction);
-                Debug.DrawRay(transform.position, direction * 5f, Color.red, 1f); // Adjust length and color as needed
+                //Debug.Log("Direction Vector: " + direction);
+                //Debug.DrawRay(transform.position, direction * 5f, Color.red, 1f); // Adjust length and color as needed
 
                 Rigidbody2D rigid = colliders[i].GetComponent<Rigidbody2D>();
                 //rigid.AddTorque(addTorqueAmountInDegrees * Mathf.Deg2Rad * rigid.inertia); breaks directional force
 
                 
                 rigid.AddForce(direction * blastForce + Vector2.down, ForceMode2D.Impulse); // Vector2.down is to make the horizontal force more apparent
-                Debug.Log("Force Applied: " + (direction * blastForce));
+                //Debug.Log("Force Applied: " + (direction * blastForce));
 
             }
             DestroyBombObject();

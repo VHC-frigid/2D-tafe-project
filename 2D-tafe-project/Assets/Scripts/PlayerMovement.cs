@@ -24,6 +24,9 @@ public class PlayerMovement : MonoBehaviour
     private float stunAmount = 0f;
     private float stunHard = 0.5f;
     [SerializeField] private float stunIntensity = 2f; // Number of seconds it takes for player stun to completely ware off
+    private float stunFactor = 1;
+    private Vector2 groundVelX;
+    private Vector2 jumpVelX;
 
     // Start is called before the first frame update
     private void Start()
@@ -37,16 +40,57 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        Debug.Log("Player X speed: " + rb.velocity.x);
+        //stunFactor - 0 locks controls to 1 which is free controls
+        stunFactor = Mathf.Clamp(Mathf.InverseLerp(stunIntensity, 0f, stunAmount) * (1 + stunHard) - stunHard, 0f, stunIntensity);
         float origVelocity = rb.velocity.x;
 
         dirX = Input.GetAxis("Horizontal");
+
+        groundVelX = new Vector2(rb.velocity.x + Mathf.Clamp((dirX * moveSpeed * (Mathf.Clamp((stunIntensity - stunAmount - stunHard) / (stunIntensity - stunHard), 0f, stunIntensity))) - rb.velocity.x, -moveSpeed, moveSpeed), rb.velocity.y);
+        jumpVelX = new Vector2(rb.velocity.x + (dirX * moveSpeed * Time.deltaTime * 3 * stunFactor), rb.velocity.y);
         // Conditions for movement
-        // If in normal bounds or 
+
+        // If not stunned hard
+        //if (stunAmount < stunIntensity - stunHard)
+        //{
+        // If in normal speed bounds        or      player holding opposite direction to movement       (check to see if applying velocity wouldn't push further past bounds)
         if (Mathf.Abs(rb.velocity.x) <= moveSpeed || Mathf.Abs(rb.velocity.x) > Mathf.Abs(rb.velocity.x + dirX))
-        {
-            rb.velocity = new Vector2(rb.velocity.x + Mathf.Clamp((dirX * moveSpeed * (Mathf.Clamp((stunIntensity-stunAmount - stunHard)/(stunIntensity - stunHard), 0f, stunIntensity))) - rb.velocity.x, -moveSpeed, moveSpeed), rb.velocity.y);
+            {
+            if (IsGrounded())
+            {
+                //if hard stunned
+                if (stunAmount > stunIntensity-stunHard)
+                {
+                    rb.velocity = jumpVelX;
+                }
+                else
+                {
+                    rb.velocity = groundVelX;
+                }
+            }
+            if(!IsGrounded())
+            {
+                if(stunAmount > 0)
+                {
+                    rb.velocity = jumpVelX;
+                }
+                else
+                {
+                    rb.velocity = groundVelX;
+                }
+            }
+            // if on the ground and hard stunned
+
+            // Mathf.Lerp(startNumber, endNumber, interpolationFactor);
+
+            //Debug.Log("Stun Lerp: " + Mathf.Clamp(Mathf.InverseLerp(stunIntensity, 0f, stunAmount) * (1+stunHard) - stunHard, 0f, stunIntensity));
+
+            //                      add to current velocity, Clamp player input movement
+            //rb.velocity = new Vector2(rb.velocity.x + Mathf.Clamp((dirX * moveSpeed * (Mathf.Clamp((stunIntensity-stunAmount - stunHard)/(stunIntensity - stunHard), 0f, stunIntensity))) - rb.velocity.x, -moveSpeed, moveSpeed), rb.velocity.y);
         }
-        if (stunAmount > stunHard) rb.velocity = new Vector2(origVelocity, rb.velocity.y);
+            //if (stunAmount > stunHard) rb.velocity = new Vector2(origVelocity, rb.velocity.y);
+        //}
 
             /*if (Input.GetAxis("Horizontal") != 0)
             {
@@ -77,8 +121,8 @@ public class PlayerMovement : MonoBehaviour
                 }
 
             }*/
-
-            if (Input.GetButtonDown("Jump") && IsGrounded())
+            //Jump handler 
+            if (Input.GetButtonDown("Jump") && IsGrounded()) //make jump up faster and feel tighter
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
@@ -92,6 +136,10 @@ public class PlayerMovement : MonoBehaviour
         if (stunAmount > 0)
         {
             stunAmount -= Time.deltaTime;
+            if (stunAmount < stunIntensity / 2 && IsGrounded() )
+            {
+                stunAmount = 0;
+            }
         }
         if (stunAmount < 0 ) stunAmount = 0;
         //Debug.Log("stunAmount: " + stunAmount);
