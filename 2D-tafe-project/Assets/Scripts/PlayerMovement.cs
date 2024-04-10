@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     private BoxCollider2D coll;
     private Animator anim;
     private SpriteRenderer sprite;
+    [SerializeField] private Camera cam;
 
     [SerializeField] private LayerMask jumpableGround;
 
@@ -27,6 +28,11 @@ public class PlayerMovement : MonoBehaviour
     private float stunFactor = 1;
     private Vector2 groundVelX;
     private Vector2 jumpVelX;
+    private Vector2 cameraLock;
+    private bool cameraLockBool = false;
+
+
+    [SerializeField] private bool _active = true;
 
     // Start is called before the first frame update
     private void Start()
@@ -35,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
         coll = GetComponent<BoxCollider2D>();
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        cam = GetComponent<Camera>();
     }
 
     // Update is called once per frame
@@ -123,9 +130,9 @@ public class PlayerMovement : MonoBehaviour
             }*/
             //Jump handler 
             if (Input.GetButtonDown("Jump") && IsGrounded()) //make jump up faster and feel tighter
-        {
+            {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-        }
+            }
 
         UpdateAnimationState();
 
@@ -214,5 +221,25 @@ public class PlayerMovement : MonoBehaviour
         mainModule2.startColor = startColor2;
     }
 
-
+    private void MiniJump()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, jumpForce / 1);
+    }
+    
+    public void Die()
+    {
+        _active = false;
+        coll.enabled = false;
+        cam.transform.position = cameraLock;
+        cameraLockBool = true;
+    }
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        Debug.LogError($"Is this happening? {col.gameObject.tag}");
+        if(col.collider.CompareTag("InstantDeath"))
+        {
+            Die();
+            MiniJump();
+        }
+    }
 }
