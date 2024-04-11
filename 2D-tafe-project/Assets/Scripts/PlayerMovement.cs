@@ -56,7 +56,6 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        Debug.Log("Player X speed: " + rb.velocity.x);
         //stunFactor - 0 locks controls to 1 which is free controls
         stunFactor = Mathf.Clamp(Mathf.InverseLerp(stunIntensity, 0f, stunAmount) * (1 + stunHard) - stunHard, 0f, stunIntensity);
         float origVelocity = rb.velocity.x;
@@ -264,8 +263,17 @@ public class PlayerMovement : MonoBehaviour
             goPanel.SetActive(true);
             Time.timeScale = 0;
             MiniJump();
+            subtitle.text = "Skill Issue";
         }
-
+        
+        else if (col.collider.CompareTag("Gem"))
+        {
+            Debug.Log("works");
+            gameOver = true;
+            goPanel.SetActive(true);
+            Time.timeScale = 0;
+            subtitle.text = "MONNNNEY";
+        }
     }
 
 }
