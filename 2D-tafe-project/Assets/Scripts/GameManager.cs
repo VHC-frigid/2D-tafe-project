@@ -14,11 +14,15 @@ public class GameManager : MonoBehaviour
 
     public Text subtitle;
     public GameObject goPanel;
+    public Text goScore;
+    public Text goHighScore;
 
     bool gameOver;
 
     public float boostTimer;
     public bool Die;
+
+    public int score;
 
     // Start is called before the first frame update
     void Start()
