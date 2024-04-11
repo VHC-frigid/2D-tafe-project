@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Runtime.CompilerServices;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -31,8 +34,11 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 cameraLock;
     private bool cameraLockBool = false;
 
-
     [SerializeField] private bool _active = true;
+
+    bool gameOver;
+    public Text subtitle;
+    public GameObject goPanel;
 
     // Start is called before the first frame update
     private void Start()
@@ -42,6 +48,9 @@ public class PlayerMovement : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         cam = GetComponent<Camera>();
+        Time.timeScale = 1;
+        gameOver = false;   
+        goPanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -87,6 +96,19 @@ public class PlayerMovement : MonoBehaviour
                     rb.velocity = groundVelX;
                 }
             }
+
+            if (gameOver)
+            {
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    SceneManager.LoadScene(1);
+                }
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    Application.Quit();
+                }
+            }
+
             // if on the ground and hard stunned
 
             // Mathf.Lerp(startNumber, endNumber, interpolationFactor);
@@ -233,21 +255,17 @@ public class PlayerMovement : MonoBehaviour
         cam.transform.position = cameraLock;
         cameraLockBool = true;
 
-        GameManager gameManager = FindObjectOfType<GameManager>();
-
-        if (gameManager != null)
-        {
-            gameManager.goPanel.SetActive(true);
-        }
-
     }
     private void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.LogError($"Is this happening? {col.gameObject.tag}");
         if(col.collider.CompareTag("InstantDeath"))
         {
-            Die();
+            gameOver = true;
+            goPanel.SetActive(true);
+            Time.timeScale = 0;
             MiniJump();
         }
+
     }
+
 }
