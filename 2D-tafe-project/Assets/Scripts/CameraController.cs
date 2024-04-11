@@ -12,6 +12,6 @@ public class CameraController : MonoBehaviour
     }
     public void CamLock()
     {
-        transform.position
+       
     }
 }

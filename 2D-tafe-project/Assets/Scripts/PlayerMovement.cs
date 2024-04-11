@@ -232,6 +232,14 @@ public class PlayerMovement : MonoBehaviour
         coll.enabled = false;
         cam.transform.position = cameraLock;
         cameraLockBool = true;
+
+        GameManager gameManager = FindObjectOfType<GameManager>();
+
+        if (gameManager != null)
+        {
+            gameManager.goPanel.SetActive(true);
+        }
+
     }
     private void OnCollisionEnter2D(Collision2D col)
     {
