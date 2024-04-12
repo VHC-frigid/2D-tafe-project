@@ -265,10 +265,12 @@ public class PlayerMovement : MonoBehaviour
             MiniJump();
             subtitle.text = "Skill Issue";
         }
-        
-        else if (col.collider.CompareTag("Gem"))
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("Gem"))
         {
-            Debug.Log("works");
             gameOver = true;
             goPanel.SetActive(true);
             Time.timeScale = 0;
