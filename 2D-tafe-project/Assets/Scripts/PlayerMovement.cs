@@ -100,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.R))
                 {
-                    SceneManager.LoadScene(1);
+                    SceneHandler.instance.ChangeScene(1);
                 }
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {

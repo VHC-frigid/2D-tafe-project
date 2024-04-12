@@ -5,16 +5,27 @@ using UnityEngine.SceneManagement;
 
 public class SceneHandler : MonoBehaviour
 {
-    public static SceneHandler sh;
+    [SerializeField] private Animator animator;
+    public float delay;
+
+    public static SceneHandler instance;
 
     void Start()
     {
-        sh = this;
+        instance = this;
     }
 
-    public void ChangeScene(string targetScene)
+    public void ChangeScene(int targetScene)
     {
-        Debug.Log("Attempting to load scene: " + targetScene);
-        SceneManager.LoadSceneAsync(targetScene);
+        Debug.Log("Attempting to load scene: " + targetScene.ToString());
+        StartCoroutine(LoadScene(targetScene));
+    }
+
+    IEnumerator LoadScene(int targetScene)
+    {
+        animator.SetTrigger("TransitionTrigger");
+        yield return new WaitForSecondsRealtime(delay);
+        Debug.Log("Loading scene");
+        SceneManager.LoadScene(targetScene);
     }
 }
