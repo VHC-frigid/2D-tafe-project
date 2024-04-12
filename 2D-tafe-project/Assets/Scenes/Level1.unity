@@ -48756,7 +48756,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1243170191177679812, guid: 760ada7cc73bfc846ab9990ca869a5ce, type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: -6
       objectReference: {fileID: 0}
     - target: {fileID: 2655709474546862928, guid: 760ada7cc73bfc846ab9990ca869a5ce, type: 3}
       propertyPath: objectToFollow
@@ -48924,6 +48924,6 @@ SceneRoots:
   - {fileID: 210815604}
   - {fileID: 1566199049}
   - {fileID: 1286747658}
-  - {fileID: 1101291754761030480}
   - {fileID: 654937294}
+  - {fileID: 1101291754761030480}
   - {fileID: 969504515}
